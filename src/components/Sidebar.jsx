@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 import { device } from 'style/responsive'
+import { motion, useAnimation } from 'framer-motion'
 
 const Sidebar = ({ sidebarHeading, children }) => {
 
   return (
-    <Container>
+    <Container animate={{ opacity: [0, 1], transition: { duration: 1 } }}>
       <SidebarHeading>{sidebarHeading}</SidebarHeading>
         {children}
     </Container>
@@ -18,7 +19,7 @@ const SidebarHeading = styled.div`
   color: black;
 `
 
-const Container = styled.aside`
+const Container = styled(motion.aside)`
   display: flex;
   flex-direction: column;
   min-width: 320px;

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link, NavLink } from 'react-router-dom'
 import { device } from 'style/responsive'
 import { MenuContext } from 'contexts/MenuContext'
-
+import { motion, useAnimation } from 'framer-motion'
 import { ReactComponent as Close } from 'assets/Close.svg'
 import { ReactComponent as LogoIcon } from 'assets/Logo.svg'
 import { ReactComponent as Plus } from 'assets/Plus.svg'
@@ -12,12 +12,16 @@ import { ReactComponent as EditIcon } from 'assets/Edit.svg'
 import { ReactComponent as GlobeIcon } from 'assets/Globe.svg'
 
 const NavMenu = () => {
-
   const menuCtx = useContext(MenuContext)
+
+  const animation = useAnimation()
+
+  async function rotatePlus() {
+    await animation.start({ rotate: 360 })
+  }
 
   return (
     <Nav className={`${menuCtx.isMenuOpen ? 'menu--active' : ''}`}>
-    
       <Container>
         {window.matchMedia(device.tablet) && (
           <CloseMenu onClick={menuCtx.toggleMenu}>
@@ -31,57 +35,61 @@ const NavMenu = () => {
         </Logo>
 
         <MenuItems>
-
-          <NewTrip>
-
-            <StyledNavLink onClick={menuCtx.toggleMenu} to="/new-trip">
+          <StyledNavLink onClick={menuCtx.toggleMenu} to="/new-trip">
+            <NewTrip
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: '2px 2px 5px rgba(0,0,0,0.5)',
+              }}
+            >
               New Trip
+              {/* <PlusClass animate={animation}> */}
               <Plus width={16} height={16} />
-            </StyledNavLink>
+              {/* </PlusClass> */}
+            </NewTrip>
+          </StyledNavLink>
 
-          </NewTrip>
-
-          <MenuItem>
-          
+          <MenuItem animate={{ x: [-200, 10, 0], transition: { duration: 1 } }}>
             <StyledNavLink onClick={menuCtx.toggleMenu} to={`/`}>
-            
               <IconWrap>
                 <ClockIcon width={16} height={16} />
               </IconWrap>
               Your trips
-
             </StyledNavLink>
-
           </MenuItem>
 
-          <MenuItem>
-
+          <MenuItem
+            animate={{
+              x: [-200, 10, 0],
+              transition: { duration: 1, delay: 0.2 },
+            }}
+          >
             <NonClickableLink onClick={menuCtx.toggleMenu}>
               <IconWrap>
                 <EditIcon width={16} height={16} />
               </IconWrap>
               Future feature
             </NonClickableLink>
-
           </MenuItem>
 
-          <MenuItem>
-
+          <MenuItem
+            animate={{
+              x: [-200, 10, 0],
+              transition: { duration: 1, delay: 0.3 },
+            }}
+          >
             <NonClickableLink onClick={menuCtx.toggleMenu}>
-
               <IconWrap>
                 <GlobeIcon width={16} height={16} />
               </IconWrap>
               Future section
-
             </NonClickableLink>
-
           </MenuItem>
-
         </MenuItems>
-
       </Container>
-
     </Nav>
   )
 }
@@ -91,7 +99,7 @@ export default NavMenu
 const Nav = styled.nav`
   font-size: 1.6rem;
   min-width: 260px;
-  height: 100vh;
+  height: 180vh;
   color: black;
   background-color: var(--grey);
 
@@ -142,7 +150,7 @@ const Logo = styled.div`
   }
 `
 
-const NewTrip = styled.div`
+const NewTrip = styled(motion.div)`
   flex: 1;
   display: flex;
   background-color: var(--accent);
@@ -151,6 +159,7 @@ const NewTrip = styled.div`
   border-radius: 10px;
   line-height: 2rem;
   margin-bottom: 3rem;
+  cursor: pointer;
 
   svg {
     margin-left: auto;
@@ -172,8 +181,9 @@ const IconWrap = styled.div`
 `
 
 const MenuItems = styled.ul``
-const MenuItem = styled.li`
+const MenuItem = styled(motion.li)`
   margin: 20px 0;
+  cursor: pointer;
 `
 
 const StyledNavLink = styled(NavLink)`
@@ -183,7 +193,7 @@ const StyledNavLink = styled(NavLink)`
   align-items: center;
   font-size: 1.6rem;
   flex: 1;
-  color: #97999b;
+  color: #000000;
 `
 
 const NonClickableLink = styled.span`
@@ -195,4 +205,7 @@ const NonClickableLink = styled.span`
   flex: 1;
   color: #97999b;
   opacity: 0.5;
+`
+const PlusClass = styled(motion.div)`
+  color: black;
 `

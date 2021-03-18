@@ -1,95 +1,292 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
-
-import {api} from 'services/httpService'
+import { Link } from 'react-router-dom'
+import Modal from 'react-modal'
+import { api } from 'services/httpService'
 import { TripContext } from 'contexts/TripContext'
 import { ReactComponent as RemoveIcon } from 'assets/Remove.svg'
 import { ReactComponent as ArrowRight } from 'assets/ArrowRight.svg'
 import { device } from 'style/responsive'
+import { motion, useAnimation } from 'framer-motion'
 
 const TripRow = ({ country, company, date, id, address }) => {
+  const [modalIsOpen, setIsOpen] = React.useState(false)
+  function openModal() {
+    setIsOpen(true)
+  }
+  function closeModal() {
+    setIsOpen(false)
+  }
+  const [state, dispatch] = useContext(TripContext)
+  const hover = useAnimation()
+  const animation = useAnimation()
 
-  const {dispatch} = useContext(TripContext)
+  const flagName = flag => {
+    switch (flag) {
+      case 'at':
+        return 'austria'
+      case 'cn':
+        return 'china'
+      case 'fr':
+        return 'france'
+      case 'gr':
+        return 'greece'
+      case 'it':
+        return 'italy'
+      case 'aw':
+        return 'netherlands'
+      case 'pt':
+        return 'portugal'
+      case 'sk':
+        return 'slovakia'
+      case 'es':
+        return 'spain'
+      case 'se':
+        return 'sweden'
+      case 'uk':
+        return 'united-kingdom'
+      default:
+        return null
+    }
+  }
+
+  const countryName = flag => {
+    switch (flag) {
+      case 'at':
+        return 'Austria'
+      case 'cn':
+        return 'China'
+      case 'fr':
+        return 'France'
+      case 'gr':
+        return 'Greece'
+      case 'it':
+        return 'Italy'
+      case 'aw':
+        return 'Netherlands'
+      case 'pt':
+        return 'Portugal'
+      case 'sk':
+        return 'Lovakia'
+      case 'es':
+        return 'Spain'
+      case 'se':
+        return 'Sweden'
+      case 'uk':
+        return 'United Kingdom'
+      default:
+        return null
+    }
+  }
 
   const flag = country.toLowerCase().split(' ').join('-')
-  const image = require('assets/flags/' + flag + '.svg').default
+  debugger
+  const image = require('assets/flags/' + flagName(flag) + '.svg').default
 
   const removeTrip = async id => {
     try {
-      await api.delete(`/trip/${id}`)
-      dispatch({ type: 'REMOVE_TRIP', payload: id  })
+      console.log(id)
+      await api.delete(`/trip/${id}`, {
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+      closeModal()
+      dispatch({ type: 'REMOVE_TRIP', payload: id })
     } catch (error) {
+      debugger
+      console.log(error)
       alert('Something went wrong while deleting trip')
     }
   }
 
+  const customStyles = {
+    content: {
+      top: '45%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      width: '500px',
+    },
+  }
+
+  async function sequence() {
+    await animation.start({ y: 70, transition: { duration: 0.2 } })
+    animation.start({ y: 0, transition: { duration: 0.2 } })
+  }
+
+  Modal.setAppElement('div')
+
   return (
-    <TripRowStyles>
+    <div>
+      <Modal
+        isOpen={modalIsOpen}
+        style={customStyles}
+        onRequestClose={closeModal}
+      >
+        <Form
+          initial={{ opacity: 0, scale: 0.75 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <Label htmlFor="q">Are you sure you want to delete this trip?</Label>
+          <FormButtonGroup>
+            <AcceptDeleteButton
+              onClick={() => removeTrip(id)}
+              whileHover={{
+                scale: 1.15,
+                translateY: -10,
+                boxShadow: '3px 3px 5px rgba(0,0,0,0.3)',
+              }}
+            >
+              Delete
+            </AcceptDeleteButton>
+            <AcceptCancelButton
+              onClick={closeModal}
+              whileHover={{
+                scale: 1.15,
+                translateY: -10,
+                boxShadow: '3px 3px 5px rgba(0,0,0,0.3)',
+              }}
+            >
+              Cancel
+            </AcceptCancelButton>
+          </FormButtonGroup>
+        </Form>
+      </Modal>
+      {/* <Link to={`/view-trip/${id}`}> */}
+      <TripRowStyles
+        initial={{ y: -200 }}
+        animate={animation}
+        onLoad={sequence}
+        whileHover={{ boxShadow: '2px 6px 10px rgba(0,0,0,0.3)' }}
+      >
+        {/* <Link to={`/view-trip/${id}`}> */}
+        <FlagColumn>
+          <img src={image} width={32} height={32} alt={country} />
+          <MobileCountry>{country}</MobileCountry>
+        </FlagColumn>
 
-      <FlagColumn>
-        <img src={image} width={32} height={32} alt={country} />
-        <MobileCountry>{country}</MobileCountry>
-      </FlagColumn>
-
-      <TripColumn>
-
-        <TripRowInline>
-          
-          <Country>{country}</Country>
-          
-          <Separator />
-          
-          <TripDate>
-          
-            <MobileLabel>Date</MobileLabel>
-            <strong>
-              <div className="innerWrapper">{date}</div>
-            </strong>
-          
-          </TripDate>
-
-        </TripRowInline>
-
-        <TripRowInline>
-
-          <Company>
-            <MobileLabel>Company</MobileLabel>
-            {company}
-          </Company>
-
-          <Separator />
-
-          <Address>
-            <div className="innerWrapper">{address}</div>
-          </Address>
-
-        </TripRowInline>
-
-      </TripColumn>
-
-      <ActionButtons>
-
-        <RemoveButton onClick={()=>removeTrip(id)}>
-          <RemoveIcon width={11} height={16} />
-        </RemoveButton>
-
-        <Link to={`/edit-trip/${id}`}>
-        
-          <ViewButton>
-            <MobileLabel>View Trip</MobileLabel>
-            <ArrowRight width={16} height={10} />
-          </ViewButton>
-
-        </Link>
-
-      </ActionButtons>
-      
-    </TripRowStyles>
+        <TripColumn>
+          <TripRowInline>
+            <Link to={`/view-trip/${id}`}>
+              <Country style={{ color: 'black' }}>
+                {countryName(country)}
+              </Country>
+            </Link>
+            <Separator />
+            <TripDate>
+              <MobileLabel>Date</MobileLabel>
+              <strong>
+                <div className="innerWrapper">{date}</div>
+              </strong>
+            </TripDate>
+          </TripRowInline>
+          <TripRowInline>
+            <Company style={{ color: 'black' }}>
+              <MobileLabel>Company</MobileLabel>
+              {company}
+            </Company>
+            <Separator />
+            <Address>
+              <div className="innerWrapper">{address}</div>
+            </Address>
+          </TripRowInline>
+        </TripColumn>
+        <ActionButtons>
+          <RemoveButton
+            onClick={() => openModal()}
+            whileHover={{
+              scale: 1.05,
+              translateY: -5,
+              boxShadow: '1px 1px 3px rgba(0,0,0,0.3)',
+            }}
+          >
+            <RemoveIcon width={11} height={16} />
+          </RemoveButton>
+          <Link to={`/edit-trip/${id}`}>
+            <ViewButton
+              whileHover={{
+                scale: 1.05,
+                translateY: -5,
+                boxShadow: '1px 1px 3px rgba(0,0,0,0.3)',
+              }}
+            >
+              <MobileLabel>View Trip</MobileLabel>
+              <ArrowRight width={16} height={10} />
+            </ViewButton>
+          </Link>
+        </ActionButtons>
+        {/* </Link> */}
+      </TripRowStyles>
+      {/* </Link> */}
+    </div>
   )
 }
 
-const TripRowStyles = styled.div`
+const Label = styled.label`
+  display: block;
+  font-size: 1.9rem;
+  margin-bottom: 2rem;
+  color: black;
+  display: block;
+  text-align: center;
+  width: 100%;
+`
+
+const Form = styled(motion.form)`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  align-items: center;
+`
+const FormButtonGroup = styled.div`
+  flex-direction: row;
+`
+
+const AcceptDeleteButton = styled(motion.div)`
+  background: red;
+  font-size: 1.6rem;
+  padding: 1.3rem 2rem;
+  margin: 1.2rem;
+  max-width: 200px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: left;
+  display: inline-block;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+
+  > svg {
+    margin-left: auto;
+  }
+`
+
+const AcceptCancelButton = styled(motion.div)`
+  background: #cccccc;
+  font-size: 1.6rem;
+  padding: 1.3rem 2rem;
+  max-width: 200px;
+  margin: 1.2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: left;
+  display: inline-block;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+
+  > svg {
+    margin-left: auto;
+  }
+`
+
+const TripRowStyles = styled(motion.div)`
   background: #f9f9fa;
   padding: 2rem;
   display: flex;
@@ -180,7 +377,7 @@ const Country = styled.div`
 `
 
 const Company = styled.div`
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   white-space: nowrap;
 
   @media ${device.tablet} {
@@ -271,7 +468,7 @@ const ActionButtons = styled.div`
   align-items: center;
 `
 
-const RemoveButton = styled.button`
+const RemoveButton = styled(motion.button)`
   background: #fbebe9;
   padding: 1.6rem 2rem;
   border-radius: 10px;
@@ -283,7 +480,7 @@ const RemoveButton = styled.button`
   }
 `
 
-const ViewButton = styled.button`
+const ViewButton = styled(motion.button)`
   background: #f1f1f2;
   padding: 1.6rem 2rem;
   border-radius: 10px;

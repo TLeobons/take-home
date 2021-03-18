@@ -4,111 +4,24 @@ import Dropdown from 'react-dropdown'
 import DatePicker from 'react-datepicker'
 import { useParams } from 'react-router-dom'
 import moment from 'moment'
-import { ReactComponent as ArrowRight } from 'assets/ArrowRight.svg'
-import { ReactComponent as AustriaFlag } from 'assets/flags/austria.svg'
-import { ReactComponent as ChinaFlag } from 'assets/flags/china.svg'
-import { ReactComponent as FranceFlag } from 'assets/flags/france.svg'
-import { ReactComponent as GreeceFlag } from 'assets/flags/greece.svg'
-import { ReactComponent as ItalyFlag } from 'assets/flags/italy.svg'
-import { ReactComponent as NetherlandsFlag } from 'assets/flags/netherlands.svg'
-import { ReactComponent as PortugalFlag } from 'assets/flags/portugal.svg'
-import { ReactComponent as SpainFlag } from 'assets/flags/spain.svg'
-import { ReactComponent as SlovakiaFlag } from 'assets/flags/slovakia.svg'
-import { ReactComponent as SwedenFlag } from 'assets/flags/sweden.svg'
-import { ReactComponent as UnitedKingdomFlag } from 'assets/flags/united-kingdom.svg'
 
 import Heading from 'components/Heading'
 import Sidebar from 'components/Sidebar'
-
+import { motion, useAnimation } from 'framer-motion'
 import { TripContext } from 'contexts/TripContext'
 import { api } from 'services/httpService'
-import { motion, useAnimation } from 'framer-motion'
+
 import { device } from 'style/responsive'
 import { ReactComponent as Check } from 'assets/Check.svg'
 import 'react-dropdown/style.css'
 import 'react-datepicker/dist/react-datepicker.css'
-import SidebarCard from 'components/SidebarCard'
 import Loader from 'react-loader-spinner'
+import SidebarCard from 'components/SidebarCard'
 
-const EditTrip = () => {
+const ViewTrip = () => {
   const [state, dispatch] = useContext(TripContext)
   const { id } = useParams()
   const xValues = [5000, -40, 0]
-
-  const editTrip = async () => {
-    try {
-      const response = await api.put(`/trip/${id}`, state.form, {
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Headers':
-            'Origin, X-Requested-With, Content-Type, Accept, Authorization',
-          'Access-Control-Request-Method': 'GET, POST, DELETE, PUT, OPTIONS',
-        },
-      })
-      dispatch({ type: 'EDIT_TRIP', payload: response.data })
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  const FlagIcon = ({ flag }) => {
-    switch (flag) {
-      case 'Austria':
-        return <AustriaFlag width={40} height={40} />
-      case 'China':
-        return <ChinaFlag width={40} height={40} />
-      case 'France':
-        return <FranceFlag width={40} height={40} />
-      case 'Greece':
-        return <GreeceFlag width={40} height={40} />
-      case 'Italy':
-        return <ItalyFlag width={40} height={40} />
-      case 'Netherlands':
-        return <NetherlandsFlag width={40} height={40} />
-      case 'Portugal':
-        return <PortugalFlag width={40} height={40} />
-      case 'Slovakia':
-        return <SlovakiaFlag width={40} height={40} />
-      case 'Spain':
-        return <SpainFlag width={40} height={40} />
-      case 'Sweden':
-        return <SwedenFlag width={40} height={40} />
-      case 'United Kingdom':
-        return <UnitedKingdomFlag width={40} height={40} />
-      default:
-        return null
-    }
-  }
-
-  const FlagName = ({ flag }) => {
-    switch (flag) {
-      case 'at':
-        return 'Austria'
-      case 'cn':
-        return 'China'
-      case 'fr':
-        return 'France'
-      case 'gr':
-        return 'Greece'
-      case 'it':
-        return 'Italy'
-      case 'aw':
-        return 'Netherlands'
-      case 'pt':
-        return 'Portugal'
-      case 'sk':
-        return 'Slovakia'
-      case 'es':
-        return 'Spain'
-      case 'se':
-        return 'Sweden'
-      case 'uk':
-        return 'United Kingdom'
-      default:
-        return null
-    }
-  }  
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -131,7 +44,7 @@ const EditTrip = () => {
   return (
     <Container>
       <Main>
-        <Heading title="Edit trip" />
+        <Heading title="View trip" />
 
         <Form>
           <FormContent>
@@ -151,20 +64,7 @@ const EditTrip = () => {
                     options={state.countries}
                     placeholder={state.form.address.country || 'Select country'}
                     value={state.form.address.country}
-                    onChange={data => {
-                      dispatch({
-                        type: 'SET_FORM',
-                        payload: {
-                          address: {
-                            country: data.value,
-                          },
-                        },
-                      })
-                      dispatch({
-                        type: 'SET_SELECTED_COUNTRY',
-                        payload: data.value,
-                      })
-                    }}
+                    disabled
                   />
                 </DPDown>
                 {/* </FormInnerGroup> */}
@@ -179,25 +79,18 @@ const EditTrip = () => {
                   <DatePickerWrap>
                     <DatePicker
                       required
-                      selected={moment(state.form.start_date).toDate()}
+                      selected={moment(state.form.start_date, 'YYYY-MM-DD')
+                        .add('1', 'day')
+                        .toDate()}
                       excludeTimes
-                      onChange={date => {
-                        dispatch({
-                          type: 'SET_FORM',
-                          payload: {
-                            start_date: date,
-                          },
-                        })
-                      }}
                       id="startDate"
                       name="startDate"
                       showPopperArrow={false}
                       selectsStart
-                      dateFormat="dd. MM. yyyy"
                       value={startDate}
                       minDate={moment().toDate()}
-                      // startDate={startDate}
-                      // endDate={endDate}
+                      dateFormat="dd. MM. yyyy"
+                      disabled
                     />
                   </DatePickerWrap>
                 </FormInnerGroup>
@@ -212,27 +105,19 @@ const EditTrip = () => {
                       required
                       selected={
                         state.form.end_date !== ''
-                          ? moment(state.form.end_date).toDate()
+                          ? moment(state.form.end_date, 'YYYY-MM-DD')
+                              .add('1', 'day')
+                              .toDate()
                           : ''
                       }
-                      onChange={date => {
-                        dispatch({
-                          type: 'SET_FORM',
-                          payload: {
-                            end_date: date,
-                          },
-                        })
-                      }}
                       id="endDate"
                       name="endDate"
-                      dateFormat="dd. MM. yyyy"
                       placeholderText="dd. mm. year"
+                      dateFormat="dd. MM. yyyy"
                       showPopperArrow={false}
                       selectsEnd
                       value={endDate}
-                      // startDate={startDate}
-                      // endDate={endDate}
-                      // minDate={startDate}
+                      disabled
                     />
                   </DatePickerWrap>
                 </FormInnerGroup>
@@ -249,15 +134,8 @@ const EditTrip = () => {
                     id="company"
                     name="company"
                     placeholder={state.form.company_name || 'Type here ...'}
-                    onChange={e => {
-                      dispatch({
-                        type: 'SET_FORM',
-                        payload: {
-                          company_name: e.target.value,
-                        },
-                      })
-                    }}
                     value={state.form.company_name}
+                    disabled
                   />
                 </FormInnerGroup>
 
@@ -271,17 +149,8 @@ const EditTrip = () => {
                     id="city"
                     name="city"
                     placeholder={state.form.address.city || 'Type here ...'}
-                    onChange={e => {
-                      dispatch({
-                        type: 'SET_FORM',
-                        payload: {
-                          address: {
-                            city: e.target.value,
-                          },
-                        },
-                      })
-                    }}
                     value={state.form.address.city}
+                    disabled
                   />
                 </FormInnerGroup>
 
@@ -295,17 +164,8 @@ const EditTrip = () => {
                     id="street"
                     name="street"
                     placeholder={state.form.address.street || 'Type here ...'}
-                    onChange={e => {
-                      dispatch({
-                        type: 'SET_FORM',
-                        payload: {
-                          address: {
-                            street: e.target.value,
-                          },
-                        },
-                      })
-                    }}
                     value={state.form.address.street}
+                    disabled
                   />
                 </FormInnerGroup>
 
@@ -321,17 +181,8 @@ const EditTrip = () => {
                     placeholder={
                       state.form.address.street_num || 'Type here ...'
                     }
-                    onChange={e => {
-                      dispatch({
-                        type: 'SET_FORM',
-                        payload: {
-                          address: {
-                            street_num: e.target.value,
-                          },
-                        },
-                      })
-                    }}
                     value={state.form.address.street_num}
+                    disabled
                   />
                 </FormInnerGroup>
 
@@ -344,19 +195,9 @@ const EditTrip = () => {
                     required
                     id="zipCode"
                     name="zipCode"
-                    type="number"
                     placeholder={state.form.address.zip || 'Type here ...'}
-                    onChange={e => {
-                      dispatch({
-                        type: 'SET_FORM',
-                        payload: {
-                          address: {
-                            zip: e.target.value,
-                          },
-                        },
-                      })
-                    }}
                     value={state.form.address.zip}
+                    disabled
                   />
                 </FormInnerGroup>
               </FormGroup>
@@ -376,15 +217,8 @@ const EditTrip = () => {
                       name="testedCovid"
                       id="yes"
                       value="0"
-                      onChange={() => {
-                        dispatch({
-                          type: 'SET_FORM',
-                          payload: {
-                            covid: true,
-                          },
-                        })
-                      }}
                       checked={state.form.covid === true}
+                      disabled
                     />
                     <div />
                     <span>Yes</span>
@@ -396,30 +230,39 @@ const EditTrip = () => {
                       name="testedCovid"
                       id="no"
                       value="1"
-                      onChange={() => {
-                        dispatch({
-                          type: 'SET_FORM',
-                          payload: {
-                            covid: false,
-                          },
-                        })
-                      }}
                       checked={state.form.covid === false}
+                      disabled
                     />
                     <div />
                     <span>No</span>
                   </RadioButton>
                 </RadioButtonGroup>
               </FormGroup>
+              <FormInnerGroup>
+                <Label htmlFor="endDate">Date of receiving test results:</Label>
+                <DatePickerWrap>
+                  <DatePicker
+                    required
+                    selected={
+                      state.form.end_date !== ''
+                        ? moment(state.form.end_date, 'YYYY-MM-DD')
+                            .add('1', 'day')
+                            .toDate()
+                        : ''
+                    }
+                    id="endDate"
+                    name="endDate"
+                    placeholderText="dd. mm. year"
+                    dateFormat="dd. MM. yyyy"
+                    showPopperArrow={false}
+                    selectsEnd
+                    value={endDate}
+                    disabled
+                  />
+                </DatePickerWrap>
+              </FormInnerGroup>
             </InnerForm>
           </FormContent>
-
-          <FormFooter>
-            <Button type="button" onClick={editTrip}>
-              Save
-              <Check width={16} height={12} />
-            </Button>
-          </FormFooter>
         </Form>
       </Main>
       <Sidebar sidebarHeading="Trips">
@@ -444,7 +287,7 @@ const EditTrip = () => {
   )
 }
 
-export default EditTrip
+export default ViewTrip
 
 const StyledLoader = styled(Loader)`
   display: flex;
@@ -452,9 +295,7 @@ const StyledLoader = styled(Loader)`
   margin: 50px;
 `
 
-const DPDown = styled(motion.div)`
-  
-`
+const DPDown = styled(motion.div)``
 
 const Container = styled.div`
   display: flex;

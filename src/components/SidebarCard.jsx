@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { ReactComponent as ArrowRight } from 'assets/ArrowRight.svg'
 import { ReactComponent as AustriaFlag } from 'assets/flags/austria.svg'
@@ -13,92 +13,115 @@ import { ReactComponent as SpainFlag } from 'assets/flags/spain.svg'
 import { ReactComponent as SlovakiaFlag } from 'assets/flags/slovakia.svg'
 import { ReactComponent as SwedenFlag } from 'assets/flags/sweden.svg'
 import { ReactComponent as UnitedKingdomFlag } from 'assets/flags/united-kingdom.svg'
+import { motion, useAnimation } from 'framer-motion'
 
 const FlagIcon = ({ flag }) => {
   switch (flag) {
-    case 'Austria':
-      return <AustriaFlag width={40} height={40}/>
-    case 'China':
+    case 'at':
+      return <AustriaFlag width={40} height={40} />
+    case 'cn':
       return <ChinaFlag width={40} height={40} />
-    case 'France':
+    case 'fr':
       return <FranceFlag width={40} height={40} />
-    case 'Greece':
+    case 'gr':
       return <GreeceFlag width={40} height={40} />
-    case 'Italy':
+    case 'it':
       return <ItalyFlag width={40} height={40} />
-    case 'Netherlands':
+    case 'aw':
       return <NetherlandsFlag width={40} height={40} />
-    case 'Portugal':
+    case 'pt':
       return <PortugalFlag width={40} height={40} />
-    case 'Slovakia':
+    case 'sk':
       return <SlovakiaFlag width={40} height={40} />
-    case 'Spain':
+    case 'es':
       return <SpainFlag width={40} height={40} />
-    case 'Sweden':
+    case 'se':
       return <SwedenFlag width={40} height={40} />
-    case 'United Kingdom':
+    case 'uk':
       return <UnitedKingdomFlag width={40} height={40} />
     default:
       return null
-    }
   }
+}
+
+const FlagName = ({ flag }) => {
+  switch (flag) {
+    case 'at':
+      return 'Austria'
+    case 'cn':
+      return 'China'
+    case 'fr':
+      return 'France'
+    case 'gr':
+      return 'Greece'
+    case 'it':
+      return 'Italy'
+    case 'aw':
+      return 'Netherlands'
+    case 'pt':
+      return 'Portugal'
+    case 'sk':
+      return 'Slovakia'
+    case 'es':
+      return 'Spain'
+    case 'se':
+      return 'Sweden'
+    case 'uk':
+      return 'United Kingdom'
+    default:
+      return null
+  }
+}
 
 const SidebarCard = ({ country, company, date, address, id }) => {
-
   return (
-    <TripRowStyles>
-
+    <TripRowStyles animate={{opacity: [0, 1], transition: { duration: 1.2 } }}>
       <FlagColumn>
-
         <FlagIcon width={40} height={40} flag={country} />
-        <MobileCountry>{country}</MobileCountry>
-
+        <MobileCountry>
+          <FlagName flag={country} />
+        </MobileCountry>
       </FlagColumn>
 
       <TripColumn>
-
         <TripRowInline>
-
           <TripDate>
             <MobileLabel>Date</MobileLabel>
             <strong>{date}</strong>
           </TripDate>
-
         </TripRowInline>
 
         <TripRowInline>
-
           <Company>
             <MobileLabel>Company</MobileLabel>
             {company}
           </Company>
-          
+
           <Address>{address}</Address>
-
         </TripRowInline>
-
       </TripColumn>
 
       <ActionButtons>
-      
-      <Link to={`/edit-trip/${id}`}>
-
-        <ViewButton>
-          <MobileLabel>View Trip</MobileLabel>
-          <ArrowRight width={16} height={10} />
-        </ViewButton>
-      
-      </Link>
-      
+        <Link to={`/view-trip/${id}`}>
+          <ViewButton
+            whileHover={{
+              scale: 1.05,
+              translateY: -10,
+              boxShadow: '3px 3px 5px rgba(0,0,0,0.3)',
+            }}
+          >
+            <MobileLabel>View Trip</MobileLabel>
+            <ArrowRight width={16} height={10} />
+          </ViewButton>
+        </Link>
       </ActionButtons>
-      
     </TripRowStyles>
   )
 }
 
 export default SidebarCard
 
-const TripRowStyles = styled.div`
+const TripRowStyles = styled(motion.div)`
   background: #f9f9fa;
   padding: 2rem;
   display: block;
@@ -188,11 +211,10 @@ const Address = styled.div`
 
 const ActionButtons = styled.div`
   margin-left: auto;
-  display: flex;
   align-items: center;
 `
 
-const ViewButton = styled.div`
+const ViewButton = styled(motion.div)`
   background: #f1f1f2;
   padding: 1.6rem 2rem;
   border-radius: 10px;

@@ -17,37 +17,36 @@ const Trips = () => {
 
   return (
     <Container>
-
       <Main>
-
         <Heading title="Your trips" />
-
         <AllTrips>
-          {state.trips.length > 0
-            ? (
-              state.trips.map(trip => (
+          {console.log(state.trips)}
+          {state.trips.length > 0 ? (
+            state.trips && state.trips.map(trip => {
+              debugger
+              console.log(trip)
+              return (
                 <TripRow
                   as={motion.div}
                   initial={{ y: -250 }}
                   key={trip.id}
                   country={trip.address.country}
-                  company={trip.company}
+                  company={trip.company_name}
                   id={trip.id}
                   address={`${trip.address.street} ${trip.address.street_num} ${trip.address.zip} ${trip.address.city}`}
                   date={`${moment(trip.start_date).format('D MMM')} - ${moment(
                     trip.end_date,
                   ).format('D MMM, YYYY')}`}
                 />
-              ))
+              )
+            })
           ) : (
             <StyledLoader type="BallTriangle" color="var(--accent)" />
           )}
         </AllTrips>
-
       </Main>
 
       <Sidebar sidebarHeading="Tips & tricks">{getRandom(tips)}</Sidebar>
-
     </Container>
   )
 }
