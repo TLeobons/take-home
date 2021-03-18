@@ -27,6 +27,7 @@ const ViewTrip = () => {
     const fetchTrip = async () => {
       const { data } = await api.get(`/trip/${id}`)
       dispatch({ type: 'SET_FORM', payload: data })
+      console.log(data);
     }
     fetchTrip()
   }, [id, dispatch])
@@ -54,6 +55,7 @@ const ViewTrip = () => {
                   animate={{ x: xValues }}
                   transition={{ duration: 1 }}
                 > */}
+                {console.log(state)}
                 <DPDown animate={{ x: xValues }} transition={{ duration: 1 }}>
                   <Label htmlFor="countries">Where do you want to go</Label>
                   <Dropdown

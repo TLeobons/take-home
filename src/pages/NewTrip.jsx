@@ -38,7 +38,7 @@ const NewTrip = () => {
         },
       })
       dispatch({ type: 'ADD_TRIP', payload: state.form })
-      await openModal();
+      await openModal()
     } catch (e) {
       console.error(e)
     }
@@ -90,7 +90,9 @@ const NewTrip = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
           >
-            <Label htmlFor="q" style={{ textAlign: 'center' }}>Data Uploaded Successfully</Label>
+            <Label htmlFor="q" style={{ textAlign: 'center' }}>
+              Data Uploaded Successfully
+            </Label>
             <FormButtonGroup>
               <Link to="/">
                 <AcceptDeleteButton
@@ -121,6 +123,9 @@ const NewTrip = () => {
                     options={state.countries}
                     placeholder="Select country"
                     onChange={data => {
+                      {
+                        console.log(data);
+                      }
                       dispatch({
                         type: 'SET_FORM',
                         payload: {
