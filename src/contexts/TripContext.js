@@ -72,7 +72,7 @@ const reducer = (state, action) => {
       return {
         trips: [...state.trips],
         form: { ...state.form },
-        countries: action.payload,
+        countries: [...action.payload],
         selectedCountry: `flag-${state.selectedCountry}`,
       }
     case 'SET_SELECTED_COUNTRY':
@@ -85,7 +85,7 @@ const reducer = (state, action) => {
     case 'SET_FORM':
       console.log(state, action.payload.address.country)
       return {
-        trips: [...state.trips],
+        trips: state.trips,
         form: {
           ...state.form,
           ...action.payload,
@@ -94,7 +94,7 @@ const reducer = (state, action) => {
             ...action.payload.address,
           },
         },
-        countries: [...state.countries],
+        countries: state.countries,
         selectedCountry: `flag-${action.payload.address.country}`,
       }
     default:
@@ -119,7 +119,7 @@ const TripProvider = ({ children }) => {
   const fetchCountries = async () => {
     const { data } = await api.get('/country')
     const sortedData = data.sort((a, b) => (a.label > b.label ? 1 : -1))
-
+    debugger
     const countriesData = []
     sortedData.forEach(data => {
       countriesData.push({
@@ -128,6 +128,7 @@ const TripProvider = ({ children }) => {
         className: `flag-${data.value}`,
       })
     })
+    debugger
     dispatch({ type: 'SET_COUNTRIES', payload: countriesData })
   }
 
