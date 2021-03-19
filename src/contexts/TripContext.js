@@ -1,4 +1,4 @@
-import { useEffect, createContext, useReducer } from 'react'
+import { createContext, useEffect, useReducer } from 'react'
 import { api } from 'services/httpService'
 
 export const TripContext = createContext()
@@ -45,7 +45,6 @@ const reducer = (state, action) => {
         countries: [...state.countries],
         selectedCountry: '',
       }
-      break
     case 'SET_TRIPS':
       return {
         trips: action.payload,

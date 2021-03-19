@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import { motion } from 'framer-motion'
 import { device } from 'style/responsive'
-import { motion, useAnimation } from 'framer-motion'
+import styled from 'styled-components'
 
 const Sidebar = ({ sidebarHeading, children }) => {
 

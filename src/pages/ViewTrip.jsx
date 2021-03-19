@@ -1,22 +1,21 @@
-import { useContext, useEffect } from 'react'
-import styled from 'styled-components'
-import Dropdown from 'react-dropdown'
-import DatePicker from 'react-datepicker'
-import { useParams } from 'react-router-dom'
-import moment from 'moment'
-
 import Heading from 'components/Heading'
 import Sidebar from 'components/Sidebar'
-import { motion, useAnimation } from 'framer-motion'
-import { TripContext } from 'contexts/TripContext'
-import { api } from 'services/httpService'
-
-import { device } from 'style/responsive'
-import { ReactComponent as Check } from 'assets/Check.svg'
-import 'react-dropdown/style.css'
-import 'react-datepicker/dist/react-datepicker.css'
-import Loader from 'react-loader-spinner'
 import SidebarCard from 'components/SidebarCard'
+import { TripContext } from 'contexts/TripContext'
+import { motion } from 'framer-motion'
+import moment from 'moment'
+import { useContext, useEffect } from 'react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
+import Loader from 'react-loader-spinner'
+import { useParams } from 'react-router-dom'
+import { api } from 'services/httpService'
+import { device } from 'style/responsive'
+import styled from 'styled-components'
+
+
 
 const ViewTrip = () => {
   const [state, dispatch] = useContext(TripContext)
@@ -500,31 +499,5 @@ const RadioButton = styled.label`
   > input:checked ~ div:before {
     opacity: 1;
     visibility: visible;
-  }
-`
-
-const FormFooter = styled.div`
-  width: 100%;
-  border-top: 1px solid #f1f1f2;
-  padding: 2rem 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
-const Button = styled.button`
-  background: var(--accent);
-  font-size: 1.6rem;
-  padding: 1.3rem 2rem;
-  flex: 1;
-  max-width: 200px;
-  border-radius: 10px;
-  font-weight: 600;
-  text-align: left;
-  display: flex;
-  align-items: center;
-
-  > svg {
-    margin-left: auto;
   }
 `

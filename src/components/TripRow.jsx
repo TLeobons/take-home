@@ -1,14 +1,13 @@
-import { useContext, useEffect } from 'react'
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import Modal from 'react-modal'
-import { api } from 'services/httpService'
-import { TripContext } from 'contexts/TripContext'
-import { ReactComponent as RemoveIcon } from 'assets/Remove.svg'
 import { ReactComponent as ArrowRight } from 'assets/ArrowRight.svg'
-import { device } from 'style/responsive'
+import { ReactComponent as RemoveIcon } from 'assets/Remove.svg'
+import { TripContext } from 'contexts/TripContext'
 import { motion, useAnimation } from 'framer-motion'
+import React, { useContext } from 'react'
+import Modal from 'react-modal'
+import { Link } from 'react-router-dom'
+import { api } from 'services/httpService'
+import { device } from 'style/responsive'
+import styled from 'styled-components'
 
 const TripRow = ({ country, company, date, id, address }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false)
@@ -19,9 +18,7 @@ const TripRow = ({ country, company, date, id, address }) => {
     setIsOpen(false)
   }
   const [state, dispatch] = useContext(TripContext)
-  const hover = useAnimation()
   const animation = useAnimation()
-
   const flagName = flag => {
     switch (flag) {
       case 'at':
@@ -79,7 +76,7 @@ const TripRow = ({ country, company, date, id, address }) => {
         return null
     }
   }
-
+  console.log(state);
   const flag = country.toLowerCase().split(' ').join('-')
   debugger
   const image = require('assets/flags/' + flagName(flag) + '.svg').default

@@ -1,28 +1,26 @@
-import React, { useContext, useEffect } from 'react'
-import styled from 'styled-components'
-import Dropdown from 'react-dropdown'
-import DatePicker from 'react-datepicker'
-import moment from 'moment'
-import Loader from 'react-loader-spinner'
-import { withRouter, useHistory, Link } from 'react-router-dom'
-import Modal from 'react-modal'
-import Heading from 'components/Heading'
-import SidebarCard from 'components/SidebarCard'
-import Sidebar from 'components/Sidebar'
-import { motion, useAnimation } from 'framer-motion'
-import { api } from 'services/httpService'
-import { TripContext } from 'contexts/TripContext'
-
-import { device } from 'style/responsive'
 import { ReactComponent as Check } from 'assets/Check.svg'
-import 'react-dropdown/style.css'
+import Heading from 'components/Heading'
+import Sidebar from 'components/Sidebar'
+import SidebarCard from 'components/SidebarCard'
+import { TripContext } from 'contexts/TripContext'
+import { motion } from 'framer-motion'
+import moment from 'moment'
+import React, { useContext, useEffect } from 'react'
+import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
+import Loader from 'react-loader-spinner'
+import Modal from 'react-modal'
+import { Link } from 'react-router-dom'
+import { api } from 'services/httpService'
+import { device } from 'style/responsive'
+import styled from 'styled-components'
 
 const NewTrip = () => {
   const [state, dispatch] = useContext(TripContext)
   console.log('form data', state.form)
   const xValues = [5000, -40, 0]
-  let history = useHistory()
   const [modalIsOpen, setIsOpen] = React.useState(false)
   function openModal() {
     setIsOpen(true)
@@ -57,23 +55,18 @@ const NewTrip = () => {
   }
 
   useEffect(() => {
-    dispatch({ type: 'SET_INITIAL', payload: '' })
-  }, [])
+    dispatch({ type: 'SET_INITIAL' })
+  }, [dispatch])
 
   let startDate =
-    state.form.start_date != ''
+    state.form.start_date !== ''
       ? moment(state.form.start_date, 'YYYY-MM-DD').toDate()
       : ''
 
   let endDate =
-    state.form.end_date != ''
+    state.form.end_date !== ''
       ? moment(state.form.end_date, 'YYYY-MM-DD').toDate()
       : ''
-
-  // if (startDate != '') {
-  //   startDate = ''
-  // }
-  // debugger
 
   return (
     <Container>
@@ -123,9 +116,6 @@ const NewTrip = () => {
                     options={state.countries}
                     placeholder="Select country"
                     onChange={data => {
-                      {
-                        console.log(data);
-                      }
                       dispatch({
                         type: 'SET_FORM',
                         payload: {
@@ -422,14 +412,6 @@ const NewTrip = () => {
 export default NewTrip
 
 const DPDown = styled(motion.div)``
-
-// const Form = styled(motion.form)`
-//   display: flex;
-//   flex-direction: column;
-//   flex: 1 1 auto;
-//   width: 100%;
-//   align-items: center;
-// `
 const FormButtonGroup = styled.div`
   flex-direction: row;
 `
@@ -440,25 +422,6 @@ const AcceptDeleteButton = styled(motion.div)`
   padding: 1.3rem 2rem;
   margin: 1.2rem;
   max-width: 200px;
-  border-radius: 10px;
-  font-weight: 600;
-  text-align: left;
-  display: inline-block;
-  align-items: center;
-  cursor: pointer;
-  color: white;
-
-  > svg {
-    margin-left: auto;
-  }
-`
-
-const AcceptCancelButton = styled(motion.div)`
-  background: #cccccc;
-  font-size: 1.6rem;
-  padding: 1.3rem 2rem;
-  max-width: 200px;
-  margin: 1.2rem;
   border-radius: 10px;
   font-weight: 600;
   text-align: left;

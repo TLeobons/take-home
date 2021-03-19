@@ -1,6 +1,3 @@
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-
 import { ReactComponent as ArrowRight } from 'assets/ArrowRight.svg'
 import { ReactComponent as AustriaFlag } from 'assets/flags/austria.svg'
 import { ReactComponent as ChinaFlag } from 'assets/flags/china.svg'
@@ -9,11 +6,14 @@ import { ReactComponent as GreeceFlag } from 'assets/flags/greece.svg'
 import { ReactComponent as ItalyFlag } from 'assets/flags/italy.svg'
 import { ReactComponent as NetherlandsFlag } from 'assets/flags/netherlands.svg'
 import { ReactComponent as PortugalFlag } from 'assets/flags/portugal.svg'
-import { ReactComponent as SpainFlag } from 'assets/flags/spain.svg'
 import { ReactComponent as SlovakiaFlag } from 'assets/flags/slovakia.svg'
+import { ReactComponent as SpainFlag } from 'assets/flags/spain.svg'
 import { ReactComponent as SwedenFlag } from 'assets/flags/sweden.svg'
 import { ReactComponent as UnitedKingdomFlag } from 'assets/flags/united-kingdom.svg'
-import { motion, useAnimation } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
+
 
 const FlagIcon = ({ flag }) => {
   switch (flag) {

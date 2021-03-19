@@ -1,24 +1,18 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components'
-import { Link, NavLink } from 'react-router-dom'
-import { device } from 'style/responsive'
-import { MenuContext } from 'contexts/MenuContext'
-import { motion, useAnimation } from 'framer-motion'
-import { ReactComponent as Close } from 'assets/Close.svg'
-import { ReactComponent as LogoIcon } from 'assets/Logo.svg'
-import { ReactComponent as Plus } from 'assets/Plus.svg'
 import { ReactComponent as ClockIcon } from 'assets/Clock.svg'
+import { ReactComponent as Close } from 'assets/Close.svg'
 import { ReactComponent as EditIcon } from 'assets/Edit.svg'
 import { ReactComponent as GlobeIcon } from 'assets/Globe.svg'
+import { ReactComponent as LogoIcon } from 'assets/Logo.svg'
+import { ReactComponent as Plus } from 'assets/Plus.svg'
+import { MenuContext } from 'contexts/MenuContext'
+import { motion } from 'framer-motion'
+import React, { useContext } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { device } from 'style/responsive'
+import styled from 'styled-components'
 
 const NavMenu = () => {
   const menuCtx = useContext(MenuContext)
-
-  const animation = useAnimation()
-
-  async function rotatePlus() {
-    await animation.start({ rotate: 360 })
-  }
 
   return (
     <Nav className={`${menuCtx.isMenuOpen ? 'menu--active' : ''}`}>
@@ -46,9 +40,7 @@ const NavMenu = () => {
               }}
             >
               New Trip
-              {/* <PlusClass animate={animation}> */}
               <Plus width={16} height={16} />
-              {/* </PlusClass> */}
             </NewTrip>
           </StyledNavLink>
 
@@ -205,7 +197,4 @@ const NonClickableLink = styled.span`
   flex: 1;
   color: #97999b;
   opacity: 0.5;
-`
-const PlusClass = styled(motion.div)`
-  color: black;
 `

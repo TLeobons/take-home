@@ -1,34 +1,22 @@
-import { useContext, useEffect } from 'react'
-import styled from 'styled-components'
-import Dropdown from 'react-dropdown'
-import DatePicker from 'react-datepicker'
-import { useParams } from 'react-router-dom'
-import moment from 'moment'
-import { ReactComponent as ArrowRight } from 'assets/ArrowRight.svg'
-import { ReactComponent as AustriaFlag } from 'assets/flags/austria.svg'
-import { ReactComponent as ChinaFlag } from 'assets/flags/china.svg'
-import { ReactComponent as FranceFlag } from 'assets/flags/france.svg'
-import { ReactComponent as GreeceFlag } from 'assets/flags/greece.svg'
-import { ReactComponent as ItalyFlag } from 'assets/flags/italy.svg'
-import { ReactComponent as NetherlandsFlag } from 'assets/flags/netherlands.svg'
-import { ReactComponent as PortugalFlag } from 'assets/flags/portugal.svg'
-import { ReactComponent as SpainFlag } from 'assets/flags/spain.svg'
-import { ReactComponent as SlovakiaFlag } from 'assets/flags/slovakia.svg'
-import { ReactComponent as SwedenFlag } from 'assets/flags/sweden.svg'
-import { ReactComponent as UnitedKingdomFlag } from 'assets/flags/united-kingdom.svg'
-
+import { ReactComponent as Check } from 'assets/Check.svg'
 import Heading from 'components/Heading'
 import Sidebar from 'components/Sidebar'
-
-import { TripContext } from 'contexts/TripContext'
-import { api } from 'services/httpService'
-import { motion, useAnimation } from 'framer-motion'
-import { device } from 'style/responsive'
-import { ReactComponent as Check } from 'assets/Check.svg'
-import 'react-dropdown/style.css'
-import 'react-datepicker/dist/react-datepicker.css'
 import SidebarCard from 'components/SidebarCard'
+import { TripContext } from 'contexts/TripContext'
+import { motion } from 'framer-motion'
+import moment from 'moment'
+import { useContext, useEffect } from 'react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
 import Loader from 'react-loader-spinner'
+import { useParams } from 'react-router-dom'
+import { api } from 'services/httpService'
+import { device } from 'style/responsive'
+import styled from 'styled-components'
+
+
 
 const EditTrip = () => {
   const [state, dispatch] = useContext(TripContext)
@@ -51,64 +39,6 @@ const EditTrip = () => {
       console.error(e)
     }
   }
-
-  const FlagIcon = ({ flag }) => {
-    switch (flag) {
-      case 'Austria':
-        return <AustriaFlag width={40} height={40} />
-      case 'China':
-        return <ChinaFlag width={40} height={40} />
-      case 'France':
-        return <FranceFlag width={40} height={40} />
-      case 'Greece':
-        return <GreeceFlag width={40} height={40} />
-      case 'Italy':
-        return <ItalyFlag width={40} height={40} />
-      case 'Netherlands':
-        return <NetherlandsFlag width={40} height={40} />
-      case 'Portugal':
-        return <PortugalFlag width={40} height={40} />
-      case 'Slovakia':
-        return <SlovakiaFlag width={40} height={40} />
-      case 'Spain':
-        return <SpainFlag width={40} height={40} />
-      case 'Sweden':
-        return <SwedenFlag width={40} height={40} />
-      case 'United Kingdom':
-        return <UnitedKingdomFlag width={40} height={40} />
-      default:
-        return null
-    }
-  }
-
-  const FlagName = ({ flag }) => {
-    switch (flag) {
-      case 'at':
-        return 'Austria'
-      case 'cn':
-        return 'China'
-      case 'fr':
-        return 'France'
-      case 'gr':
-        return 'Greece'
-      case 'it':
-        return 'Italy'
-      case 'aw':
-        return 'Netherlands'
-      case 'pt':
-        return 'Portugal'
-      case 'sk':
-        return 'Slovakia'
-      case 'es':
-        return 'Spain'
-      case 'se':
-        return 'Sweden'
-      case 'uk':
-        return 'United Kingdom'
-      default:
-        return null
-    }
-  }  
 
   useEffect(() => {
     const fetchTrip = async () => {
