@@ -78,7 +78,6 @@ const TripRow = ({ country, company, date, id, address }) => {
   }
   console.log(state);
   const flag = country.toLowerCase().split(' ').join('-')
-  debugger
   const image = require('assets/flags/' + flagName(flag) + '.svg').default
 
   const removeTrip = async id => {
@@ -92,7 +91,6 @@ const TripRow = ({ country, company, date, id, address }) => {
       closeModal()
       dispatch({ type: 'REMOVE_TRIP', payload: id })
     } catch (error) {
-      debugger
       console.log(error)
       alert('Something went wrong while deleting trip')
     }

@@ -106,7 +106,6 @@ const TripProvider = ({ children }) => {
 
   const fetchData = async () => {
     const { data } = await api.get('/trip')
-    debugger
     dispatch({ type: 'SET_TRIPS', payload: data })
   }
 
@@ -118,7 +117,6 @@ const TripProvider = ({ children }) => {
   const fetchCountries = async () => {
     const { data } = await api.get('/country')
     const sortedData = data.sort((a, b) => (a.label > b.label ? 1 : -1))
-    debugger
     const countriesData = []
     sortedData.forEach(data => {
       countriesData.push({
@@ -127,7 +125,6 @@ const TripProvider = ({ children }) => {
         className: `flag-${data.value}`,
       })
     })
-    debugger
     dispatch({ type: 'SET_COUNTRIES', payload: countriesData })
   }
 

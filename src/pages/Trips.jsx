@@ -23,7 +23,6 @@ const Trips = () => {
           {console.log(state.trips)}
           {state.trips.length > 0 ? (
             state.trips && state.trips.map(trip => {
-              debugger
               console.log(trip)
               return (
                 <TripRow
